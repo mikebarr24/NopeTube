@@ -1,0 +1,27 @@
+{
+  "manifest_version": 3,
+  "name": "NopeTube",
+  "version": "1.0",
+  "description": "Classifies YouTube videos as educational or time-wasting and blocks the rest",
+  "permissions": ["storage"],
+  "host_permissions": [
+    "https://www.youtube.com/*",
+    "https://api.openai.com/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["https://www.youtube.com/*"],
+      "js": ["content.js"]
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["no.html"],
+      "matches": ["https://www.youtube.com/*"]
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "NopeTube settings"
+  }
+}
