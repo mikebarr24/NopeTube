@@ -1,3 +1,7 @@
+if (window.location.pathname.startsWith("/shorts/")) {
+  window.location.href = chrome.runtime.getURL("no.html");
+}
+
 let lastVideoId = null;
 
 function getVideoId() {
