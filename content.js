@@ -42,6 +42,7 @@ async function classify(title) {
       },
       body: JSON.stringify({
         model: "gpt-4o-mini",
+        temperature: 0,
         max_tokens: 5,
         messages: [
           { role: "system", content: systemPrompt },
