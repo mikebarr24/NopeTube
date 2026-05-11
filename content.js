@@ -14,7 +14,17 @@ function getTitle() {
   return el ? el.textContent.trim() : null;
 }
 
-async function classify(title) {
+function getChannel() {
+  const el = document.querySelector("ytd-channel-name yt-formatted-string a");
+  return el ? el.textContent.trim() : null;
+}
+
+function getTags() {
+  const meta = document.querySelector('meta[name="keywords"]');
+  return meta ? meta.content.trim() : null;
+}
+
+async function classify(title, channel, tags) {
   const { openaiKey, allowedGenres, disallowedGenres } = await chrome.storage.local.get(["openaiKey", "allowedGenres", "disallowedGenres"]);
   if (!openaiKey) return;
 
@@ -46,7 +56,11 @@ async function classify(title) {
         max_tokens: 5,
         messages: [
           { role: "system", content: systemPrompt },
-          { role: "user", content: title },
+          { role: "user", content: [
+              `Title: ${title}`,
+              channel ? `Channel: ${channel}` : null,
+              tags    ? `Tags: ${tags}`       : null,
+            ].filter(Boolean).join("\n") },
         ],
       }),
     });
@@ -72,7 +86,7 @@ function tryClassify() {
     if (title) {
       clearInterval(poll);
       lastVideoId = id;
-      classify(title);
+      classify(title, getChannel(), getTags());
     } else if (++attempts > 20) {
       clearInterval(poll);
     }
