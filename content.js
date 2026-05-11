@@ -1,6 +1,10 @@
-if (window.location.pathname.startsWith("/shorts/")) {
-  window.location.href = chrome.runtime.getURL("no.html");
+function blockIfShorts() {
+  if (window.location.pathname.startsWith("/shorts/")) {
+    window.location.href = chrome.runtime.getURL("no.html");
+  }
 }
+
+blockIfShorts();
 
 let lastVideoId = null;
 
@@ -93,5 +97,8 @@ function tryClassify() {
   }, 250);
 }
 
-window.addEventListener("yt-navigate-finish", tryClassify);
+window.addEventListener("yt-navigate-finish", () => {
+  blockIfShorts();
+  tryClassify();
+});
 tryClassify();
